@@ -20,7 +20,7 @@ from rest_framework import routers
 from location_provider.views import LocationProviderViewSet
 
 router = routers.DefaultRouter()
-router.register('location_provider', LocationProviderViewSet, "locationProvider")
+router.register('locationProvider', LocationProviderViewSet, "locationProvider")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
