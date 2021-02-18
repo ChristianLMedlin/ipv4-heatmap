@@ -16,14 +16,15 @@ class LocationProviderViewSet(viewsets.ViewSet):
 
     def list(self, request):
         queryset = LocationProvider.objects.all()
-        #serializer = LocationProviderSerializer(queryset, many=True)
         query = request.query_params
-        if "bottomLat" in query and "topLat" in query:
+        if "latRange" in query:
+            low_lat, high_lat = query["latRange"].split(",")
             queryset = queryset.filter(
-                    latitude__range=(query["bottomLat"], query["topLat"]))
-        if "bottomLong" in query and "topLong" in query:
+                    latitude__range=(low_lat, high_lat))
+        if "longRange" in query:
+            low_long, high_long = query["longRange"].split(",")
             queryset = queryset.filter(
-                    longitude__range=(query["bottomLong"], query["topLong"]))
+                    longitude__range=(low_long, high_long))
         serializer = LocationProviderSerializer(queryset, many=True)
 
         return Response(serializer.data)
