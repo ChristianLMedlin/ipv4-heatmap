@@ -20,7 +20,7 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.getenv("HEATMAP_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "ipv4-heatmap-christian-medlin.herokuapp.com",
