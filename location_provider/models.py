@@ -13,3 +13,6 @@ class LocationProvider(models.Model):
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
     accuracy_radius = models.IntegerField(null=True)
+
+    def __str__(self):
+        return f"{self.latitude}, {self.longitude}"
