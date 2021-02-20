@@ -30,6 +30,8 @@ class LocationProviderViewSet(viewsets.ViewSet):
         # Limit large calls to 10,000 objects to reduce latency.
         queryset = queryset[:10000]
 
+        # If latLongOnly is True, the serializer will only return latitude and 
+        # longitude in the response.
         if "latLongOnly" in query:
             if query["latLongOnly"].lower() == "true":
                 serializer = LatLongOnlySerializer(queryset, many=True)
