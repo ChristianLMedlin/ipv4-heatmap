@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from .serializers import LocationProviderSerializer
+from .serializers import LocationProviderSerializer, LatLongOnlySerializer
 from .models import LocationProvider
 
 
@@ -28,6 +28,12 @@ class LocationProviderViewSet(viewsets.ViewSet):
             queryset = queryset.filter(
                     longitude__range=(low_long, high_long))
         # Limit large calls to 10,000 objects to reduce latency.
-        serializer = LocationProviderSerializer(queryset[:10000], many=True)
+        queryset = queryset[:10000]
+
+        if "latLongOnly" in query:
+            if query["latLongOnly"].lower() == "true":
+                serializer = LatLongOnlySerializer(queryset, many=True)
+        else:
+            serializer = LocationProviderSerializer(queryset, many=True)
 
         return Response(serializer.data)
