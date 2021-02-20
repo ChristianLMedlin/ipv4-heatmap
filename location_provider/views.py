@@ -17,6 +17,8 @@ class LocationProviderViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = LocationProvider.objects.all()
         query = request.query_params
+        # Check if either latRange or longRange are in query_marams.
+        # If they are, filter the queryset based on the value ranges provided.
         if "latRange" in query:
             low_lat, high_lat = query["latRange"].split(",")
             queryset = queryset.filter(
@@ -25,6 +27,7 @@ class LocationProviderViewSet(viewsets.ViewSet):
             low_long, high_long = query["longRange"].split(",")
             queryset = queryset.filter(
                     longitude__range=(low_long, high_long))
-        serializer = LocationProviderSerializer(queryset, many=True)
+        # Limit large calls to 10,000 objects to reduce latency.
+        serializer = LocationProviderSerializer(queryset[:10000], many=True)
 
         return Response(serializer.data)
