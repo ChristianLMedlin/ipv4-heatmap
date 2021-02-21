@@ -27,8 +27,8 @@ class LocationProviderViewSet(viewsets.ViewSet):
             low_long, high_long = query["longRange"].split(",")
             queryset = queryset.filter(
                     longitude__range=(low_long, high_long))
-        # Limit large calls to 10,000 objects to reduce latency.
-        queryset = queryset[:10000]
+        # Limit large calls to 20,000 objects to reduce latency.
+        queryset = queryset[:20000]
 
         # If latLongOnly is True, the serializer will only return latitude and 
         # longitude in the response.
