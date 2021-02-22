@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 from .serializers import LocationProviderSerializer, LatLongOnlySerializer
@@ -29,7 +29,6 @@ class LocationProviderViewSet(viewsets.ViewSet):
                     longitude__range=(low_long, high_long))
         # Limit large calls to 15,000 objects to reduce latency.
         queryset = queryset[:15000]
-
         # If latLongOnly is True, the serializer will only return latitude and 
         # longitude in the response.
         if "latLongOnly" in query:
@@ -37,5 +36,9 @@ class LocationProviderViewSet(viewsets.ViewSet):
                 serializer = LatLongOnlySerializer(queryset, many=True)
         else:
             serializer = LocationProviderSerializer(queryset, many=True)
+        # If there are no results, HTTP 204 should be returned.
+        status_code = status.HTTP_200_OK
+        if not queryset:
+            status_code = status.HTTP_204_NO_CONTENT
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=status_code)
